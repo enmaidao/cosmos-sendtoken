@@ -10,15 +10,13 @@ import fs from "fs"
 import csv from "csv-parser"
 import iconv from "iconv-lite"
 
-
-
 const getAliceSignerFromMnemonic =  async  ( ) :  Promise < OfflineDirectSigner >  =>  { 
     return DirectSecp256k1HdWallet . fromMnemonic ( ( await  readFile ( "./testnet.alice.mnemonic.key" ) ) . toString ( ) ,  { 
         prefix :  "sei" , 
     } ) 
 }
 
-const rpc = '';
+const rpc = 'https://sei-testnet-2-rpc.brocha.in/';
 const runAll = async(): Promise<void> => {
     const client = await StargateClient.connect(rpc)
 
@@ -30,7 +28,7 @@ const runAll = async(): Promise<void> => {
 
      // Read CSV file
     const results: any[] = [];
-    fs.createReadStream('./test.csv')
+    fs.createReadStream('./test10000.csv')
         .pipe(iconv.decodeStream('utf-8'))
         .pipe(csv())
         .on('data', (data) => results.push(data))
@@ -45,10 +43,10 @@ const runAll = async(): Promise<void> => {
             const aliceSigner: OfflineDirectSigner = await getAliceSignerFromMnemonic()
             const signingClient = await SigningStargateClient.connectWithSigner(rpc, aliceSigner)
 
-            console.log("Alice balance before:", await client.getAllBalances(alice))
-            console.log("Faucet balance before:", await client.getAllBalances(faucet))
-            console.log(alice)
-            console.log(faucet)
+            // console.log("Alice balance before:", await client.getAllBalances(alice))
+            // console.log("Faucet balance before:", await client.getAllBalances(faucet))
+            // console.log(alice)
+            // console.log(faucet)
 
             const fee = calculateFee(500000, "0.1usei");
 
@@ -62,8 +60,8 @@ const runAll = async(): Promise<void> => {
 
             // Output the result of the Tx
             console.log("Transfer result:", result)
-            console.log("Alice balance after:", await client.getAllBalances(alice))
-            console.log("Faucet balance after:", await client.getAllBalances(faucet))
+            // console.log("Alice balance after:", await client.getAllBalances(alice))
+            // console.log("Faucet balance after:", await client.getAllBalances(faucet))
         }
     });
 }
